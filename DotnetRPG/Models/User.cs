@@ -1,4 +1,6 @@
-﻿namespace DotnetRPG.Models
+﻿using System.Collections.Generic;
+
+namespace DotnetRPG.Models
 {
     public class User
     {
@@ -7,5 +9,6 @@
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
 
+        public List<Character> Characters { get; set; }
     }
 }
