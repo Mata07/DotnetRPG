@@ -38,7 +38,7 @@ namespace DotnetRPG.Controllers
             return Ok(await _characterService.GetCharacterById(id));
         }
 
-
+        [HttpPost]
         public async Task<IActionResult> AddCharacter(AddCharacterDto newCharacter)
         {
             //characters.Add(newCharacter);
@@ -46,5 +46,17 @@ namespace DotnetRPG.Controllers
             return Ok(await _characterService.AddCharacter(newCharacter));
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateCharacter(UpdateCharacterDto updatedCharacter)
+        {
+            // check if Character Id is not real, return 404
+            ServiceResponse<GetCharacterDto> response = await _characterService.UpdateCharacter(updatedCharacter);
+            if(response.Data == null) 
+            { 
+                return NotFound(response);  // return 404
+            }
+
+            return Ok(response);
+        }
     }
 }

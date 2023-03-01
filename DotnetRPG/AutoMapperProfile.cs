@@ -8,8 +8,8 @@ namespace DotnetRPG
     {
         public AutoMapperProfile()
         {
-            CreateMap<Character, GetCharacterDto>();
-            CreateMap<AddCharacterDto, Character>();
+            CreateMap<Character, GetCharacterDto>();  // Character to GetCharacterDto
+            CreateMap<AddCharacterDto, Character>();    //AddCharacterDto -> Character
         }
     }
 }

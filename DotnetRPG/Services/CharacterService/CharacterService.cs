@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DotnetRPG.Dtos.Character;
 using DotnetRPG.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,6 +55,34 @@ namespace DotnetRPG.Services.CharacterService
             //return characters.FirstOrDefault(c => c.Id == id);
             ServiceResponse<GetCharacterDto> serviceResponse = new ServiceResponse<GetCharacterDto>();
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(characters.FirstOrDefault(c => c.Id == id));
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
+        {
+            var serviceResponse = new ServiceResponse<GetCharacterDto>();
+
+            try
+            {
+                Character character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+
+                // Ne radimo sa AutoMapperom kako ne bi pregazili sve propertiese
+                character.Name = updatedCharacter.Name;
+                character.Class = updatedCharacter.Class;
+                character.Defense = updatedCharacter.Defense;
+                character.HitPoints = updatedCharacter.HitPoints;
+                character.Intelligence = updatedCharacter.Intelligence;
+                character.Strength = updatedCharacter.Strength;
+                // Mapiramo character u GetCharacterDto
+                serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+            }
+            catch (Exception ex)
+            {
+                // šaljemo poruke iz ServiceResponse
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
             return serviceResponse;
         }
     }
