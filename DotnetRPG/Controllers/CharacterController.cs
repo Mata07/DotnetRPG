@@ -1,6 +1,7 @@
 ﻿using DotnetRPG.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,7 +15,7 @@ namespace DotnetRPG.Controllers
         private static List<Character> characters = new List<Character>
         {
             new Character(),
-            new Character { Name = "Sam"}
+            new Character { Id = 1, Name = "Sam"}
         };
 
         //[Route("GetAll")]
@@ -24,11 +25,18 @@ namespace DotnetRPG.Controllers
             return Ok(characters);
         }
 
-        public IActionResult GetSingle()
+        [HttpGet("{id}")]
+        public IActionResult GetSingle(int id)
         {
-            return Ok(characters[0]);
+            return Ok(characters.FirstOrDefault(c => c.Id == id));
         }
 
+
+        public IActionResult AddCharacter(Character newCharacter)
+        {
+            characters.Add(newCharacter);
+            return Ok(characters);
+        }
 
     }
 }
