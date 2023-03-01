@@ -36,6 +36,7 @@ namespace DotnetRPG.Services.CharacterService
             Character character = _mapper.Map<Character>(newCharacter);
             character.Id = characters.Max(c => c.Id) + 1;
             characters.Add(character);
+
             serviceResponse.Data = (characters.Select(c => _mapper.Map<GetCharacterDto>(c))).ToList();
             return serviceResponse;
         }
