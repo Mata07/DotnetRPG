@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using DotnetRPG.Data;
 using DotnetRPG.Dtos.Character;
 using DotnetRPG.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +20,12 @@ namespace DotnetRPG.Services.CharacterService
 
 
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public CharacterService(IMapper mapper)
+        public CharacterService(IMapper mapper, DataContext context)
         {
             _mapper = mapper;
+            _context = context;
         }
 
 
@@ -71,7 +75,8 @@ namespace DotnetRPG.Services.CharacterService
         {
             //return characters;
             ServiceResponse<List<GetCharacterDto>> serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            serviceResponse.Data = (characters.Select(c => _mapper.Map<GetCharacterDto>(c))).ToList();
+            List<Character> dbCharacters = await _context.Characters.ToListAsync();
+            serviceResponse.Data = (dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c))).ToList();
             return serviceResponse;
         }
 
@@ -80,7 +85,10 @@ namespace DotnetRPG.Services.CharacterService
         {
             //return characters.FirstOrDefault(c => c.Id == id);
             ServiceResponse<GetCharacterDto> serviceResponse = new ServiceResponse<GetCharacterDto>();
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(characters.FirstOrDefault(c => c.Id == id));
+
+            Character dbCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
+
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(dbCharacter);
             return serviceResponse;
         }
 
