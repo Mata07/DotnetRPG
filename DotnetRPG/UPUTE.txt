@@ -3,3 +3,17 @@
 https://www.youtube.com/watch?v=H4qg9HJX_SE&list=PLnh2I2NFfnGBQ1IIpMZAAKAO93MbXOf9D&index=11&t=1981s   - youtube
 
 https://github.com/patrickgod/dotnet-rpg  - GitHub
+
+
+
+Entity Framework:
+------------------------------------------------------------
+Add-Migration InitialCreate   - add
+Update-Database
+
+
+Connection string in appsettings.json:
+------------------------------------------------------------
+ "ConnectionStrings": {
+    "DefaultConnection": "Server=.\\SQLExpress22;Database=dotnet-rpg;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
