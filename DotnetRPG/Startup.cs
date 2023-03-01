@@ -27,7 +27,8 @@ namespace DotnetRPG
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<ICharacterService, CharacterService>();
+            services.AddAutoMapper(typeof(Startup));                    // AutoMapper
+            services.AddScoped<ICharacterService, CharacterService>();  // Service
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
