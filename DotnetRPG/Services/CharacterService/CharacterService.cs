@@ -94,15 +94,18 @@ namespace DotnetRPG.Services.CharacterService
 
             try
             {
-                Character character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
-
-                // Ne radimo sa AutoMapperom kako ne bi pregazili sve propertiese
+                Character character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == updatedCharacter.Id);
+                //Ne radimo sa AutoMapperom kako ne bi pregazili sve propertiese
                 character.Name = updatedCharacter.Name;
                 character.Class = updatedCharacter.Class;
                 character.Defense = updatedCharacter.Defense;
                 character.HitPoints = updatedCharacter.HitPoints;
                 character.Intelligence = updatedCharacter.Intelligence;
                 character.Strength = updatedCharacter.Strength;
+
+                _context.Characters.Update(character);
+                await _context.SaveChangesAsync();
+
                 // Mapiramo character u GetCharacterDto
                 serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
             }
