@@ -30,7 +30,12 @@ namespace DotnetRPG.Services.CharacterService
             //    return characters;
 
             ServiceResponse<List<GetCharacterDto>> serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            characters.Add(_mapper.Map<Character>(newCharacter));
+            //characters.Add(_mapper.Map<Character>(newCharacter));
+
+            // tražimo zadnji Id i dodajemo novi
+            Character character = _mapper.Map<Character>(newCharacter);
+            character.Id = characters.Max(c => c.Id) + 1;
+            characters.Add(character);
             serviceResponse.Data = (characters.Select(c => _mapper.Map<GetCharacterDto>(c))).ToList();
             return serviceResponse;
         }
