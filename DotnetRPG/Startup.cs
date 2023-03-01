@@ -1,4 +1,5 @@
 using DotnetRPG.Data;
+using DotnetRPG.Services.AuthenticationService;
 using DotnetRPG.Services.CharacterService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,7 @@ namespace DotnetRPG
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));                    // AutoMapper
             services.AddScoped<ICharacterService, CharacterService>();  // Service
+            services.AddScoped<IAuthRepository, AuthRepository>();      // AuthRepo Service
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
