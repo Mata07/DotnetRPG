@@ -3,6 +3,7 @@ using DotnetRPG.Services.CharacterService;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,25 +24,25 @@ namespace DotnetRPG.Controllers
 
         //[Route("GetAll")]
         [HttpGet("GetAll")] // Route i action u jednom
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             //return Ok(characters);
-            return Ok(_characterService.GetAllCharacters());
+            return Ok(await _characterService.GetAllCharacters());
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetSingle(int id)
+        public async Task<IActionResult> GetSingle(int id)
         {
             //return Ok(characters.FirstOrDefault(c => c.Id == id));
-            return Ok(_characterService.GetCharacterById(id));
+            return Ok(await _characterService.GetCharacterById(id));
         }
 
 
-        public IActionResult AddCharacter(Character newCharacter)
+        public async Task<IActionResult> AddCharacter(Character newCharacter)
         {
             //characters.Add(newCharacter);
             //return Ok(characters);
-            return Ok(_characterService.AddCharacter(newCharacter));
+            return Ok(await _characterService.AddCharacter(newCharacter));
         }
 
     }
