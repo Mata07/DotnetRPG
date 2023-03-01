@@ -8,6 +8,12 @@ https://github.com/patrickgod/dotnet-rpg  - GitHub
 
 Entity Framework:
 ------------------------------------------------------------
+Paketi:
+Microsoft.EntityFrameworkCore.Design
+Microsoft.EntityFrameworkCore.Tools
+Microsoft.EntityFrameworkCore.SQLServer
+
+Migracije:
 Add-Migration InitialCreate   - add
 Update-Database
 
@@ -17,3 +23,18 @@ Connection string in appsettings.json:
  "ConnectionStrings": {
     "DefaultConnection": "Server=.\\SQLExpress22;Database=dotnet-rpg;Trusted_Connection=True;MultipleActiveResultSets=true"
   },
+
+Authentication:
+------------------------------------------------------------
+
+Kreiramo password hash i salt (zajedno salt i password čine hash koji se provjerava)
+
+//     OUT KEYWORD!    sa out keyword ne moramo return nego out automatski vraća
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt) 
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
