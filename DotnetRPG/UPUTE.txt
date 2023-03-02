@@ -38,3 +38,76 @@ Kreiramo password hash i salt (zajedno salt i password čine hash koji se provje
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
+
+Zašto koristiti JSON Web Tokens:
+--------------------------------
+! TLDR - ne koristiti session ili cookies nego web tokens jer su sigurniji !
+
+At this stage of our application, the user can log in with her username and password. 
+We verify the credentials and tell the user that the password is correct.
+
+But if the user wants to call a function, where she needs to be authenticated, 
+she would have to send the credentials again. That’s because the web service is stateless.
+
+This means, we never know who sent a request. Unless we get some credentials with the request.
+
+Instead of entering the credentials every single time with every request, 
+we could store the username and password on the local or session storage of the browser and grab the information from there.
+But that’s highly insecure because everybody who has access to your computer could have a glance at your password.
+
+That’s where tokens come in.
+
+A token is nothing more than a long string that stores information - or claims - of the user.
+These claims do not consist of the password, but it could tell the server who the user is and what kind of rights the user might have.
+
+The token is generated with a private key only the server knows. 
+So it’s hard to fake such a token. And we can give that token an expiration date. 
+So, even if someone would be able to steal your token, 
+chances are that the token is invalid as soon as this certain someone tries to use it.
+
+On the website jwt.io, we’re able to have a look at a JSON web token and even how the information is stored in it.
+
+
+
+AutoMapper:
+----------------------------------------------------------------------------------------
+https://amrelsher07.medium.com/repository-pattern-with-automapper-in-net-core-213918e2e36b ili
+https://www.thetechplatform.com/post/repository-pattern-with-automapper-in-net-core
+
+Mapira u Service Layer 
+Primjer za MVC App, ali isti princip: 
+Repo - 
+public async Task<T> GetByIdAsync(int id)
+{
+    return await _dbContext.Set<T>.FindAsync(id);
+}
+
+U Service layer:
+install AutoMapper
+install AutoMapper.Extensions.ExpressionMapping
+install AutoMapper.Extensions.Microsoft.DependencyInjection
+
+IService kod:
+    Task<TDto> GetByIdAsync(int id);
+
+IService kod:
+    dependancy inject - IRepo i IMapper
+
+    public async Task<TDto> GetByIdAsync(int id)
+    {
+        // get Domain model from DB
+        var entity = await _repo.GetByIdAsync(id);
+        // map domain to Dto
+        return _mapper.Map<TDto>(entity);
+    }
+
+Controller kod:
+    di IService
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if(id = null) return NotFound();
+        var model = await service.GetByIdAsync(id.Value);
+        if(model = null) return NotFound();
+        return View(model);
+    }
